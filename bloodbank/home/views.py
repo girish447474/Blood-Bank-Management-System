@@ -61,17 +61,12 @@ def LogIn(request):
             if user.is_active:
                 login(request,user)
 
-                #data=User.objects.all()
-                #count=0
-                #for data1 in data:
-                #    count=count+1
-                #print(count)
+             
 
                 return HttpResponseRedirect(reverse("home:index"))
-            #else:
-                #return HttpResponse("<h2>Account isn't active</h2>")
+
         else:
-            return HttpResponse("<h2>Account doesn't exit</h2>")
+            return HttpResponse("<h2>username or password are incorrect</h2>")
 
 
     else:
