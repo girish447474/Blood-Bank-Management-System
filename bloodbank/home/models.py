@@ -64,7 +64,7 @@ class DonorAddress(models.Model):
     phone = models.CharField(blank = False, null = False, max_length = 100)
     birth = models.CharField(blank = False, null = False, max_length = 200)
     gender = models.CharField(max_length=15, choices=Gender)
-    date = models.DateTimeField(auto_now = True, auto_now_add = False)
+    date = models.DateTimeField(auto_now_add = True)
     blood = models.CharField(max_length=10, choices=Blood_Groups)
 
 class DonorProfile(models.Model):
@@ -76,11 +76,27 @@ class DonorProfile(models.Model):
 
 
 class DonorHistory(models.Model):
-    username=models.CharField(max_length =200, null = False, blank = False)
+    donorhistoryid = models.AutoField(primary_key = True)
+    user = models.ForeignKey(User,on_delete = models.CASCADE)
+    #username=models.CharField(max_length =200, null = False, blank = False)
     donation_date = models.DateTimeField(auto_now = True, auto_now_add = False)
 
+# Donor's Wallet
 
+class Wallet(models.Model):
+    walletid = models.AutoField(primary_key = True)
+    user = models.OneToOneField(User,on_delete = models.CASCADE)
+    credit = models.IntegerField(default = 0)
 
+class Transaction(models.Model):
+    transactionid = models.AutoField(primary_key = True)
+    wallet = models.ForeignKey(Wallet, on_delete = models.CASCADE)
+    date = models.DateTimeField(auto_now_add = True)
+    initialcredit = models.IntegerField(null = True, blank = True)
+    aftercredit = models.IntegerField(null = True, blank = True)
+    getcredit = models.IntegerField(null = True)
+    def updatewallet(self):
+        self.wallet.credit = self.wallet.credit + self.getcredit
 
 
 
@@ -91,7 +107,7 @@ class DonorHistory(models.Model):
 
 class AcceptorAddress(models.Model):
     acceptoraddressid = models.AutoField(primary_key = True)
-    #user = models.OneToOneField(User,on_delete = models.CASCADE)
+    user = models.OneToOneField(User,on_delete = models.CASCADE)
     state = models.CharField(max_length = 30, choices=States)
     city = models.CharField(blank = False, null = False, max_length = 200)
     phone = models.CharField(blank = False, null = False, max_length = 100)
@@ -103,22 +119,18 @@ class AcceptorAddress(models.Model):
 class AcceptorProfile(models.Model):
     acceptorprofileid = models.AutoField(primary_key = True)
     user = models.OneToOneField(User,on_delete = models.CASCADE)
-    acceptoraddress = models.OneToOneField(AcceptorAddress,on_delete = models.CASCADE)
     status = models.CharField(null = True, max_length = 200)
     feedback = models.CharField(null = True, max_length = 1000)
 
 
 class AcceptorHistory(models.Model):
-    username=models.CharField(max_length =200, null = False, blank = False)
-    accepted_date = models.DateTimeField(auto_now = True, auto_now_add = False)
-
-
-
+    acceptorhistoryid = models.AutoField(primary_key = True)
+    user = models.ForeignKey(User,on_delete = models.CASCADE)
+    #username=models.CharField(max_length =200, null = False, blank = False)
+    acceptation_date = models.DateTimeField(auto_now = True, auto_now_add = False)
 
 
 #Blood Donation Camp
-
-
 
 
 class BloodCamp(models.Model):
