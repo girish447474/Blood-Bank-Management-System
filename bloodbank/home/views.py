@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import DonorAddress, DonorProfile
+from .models import UserAddress, UserProfile
 from . import forms
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -17,30 +17,30 @@ def index(request):
 def SignUp(request):
 
     userform=forms.UserForm()
-    donoraddressform=forms.DonorAddressForm()
+    useraddressform=forms.UserAddressForm()
 
     if request.method=="POST":
         userform=forms.UserForm(data = request.POST)
-        donoraddressform=forms.DonorAddressForm(data = request.POST)
+        useraddressform=forms.UserAddressForm(data = request.POST)
         birth = request.POST['birth']
 
-        if userform.is_valid() and donoraddressform.is_valid():
+        if userform.is_valid() and useraddressform.is_valid():
             user=userform.save(commit=False)
-            donoraddress=donoraddressform.save(commit=False)
+            useraddress=useraddressform.save(commit=False)
             user.set_password(user.password)
             user.save()
-            donoraddress.user=user
-            donoraddress.birth=birth
-            donoraddress.save()
+            useraddress.user=user
+            useraddress.birth=birth
+            useraddress.save()
 
-            DonorProfile.objects.create(user = user)
+            UserProfile.objects.create(user = user)
 
 
             return HttpResponseRedirect(reverse("home:index"))
         else:
             return HttpResponse("invalid data")
 
-    return render(request,'home/signup.html',{'form':userform,'address':donoraddressform})
+    return render(request,'home/signup.html',{'form':userform,'address':useraddressform})
 
 
 @login_required
@@ -61,7 +61,7 @@ def LogIn(request):
             if user.is_active:
                 login(request,user)
 
-             
+
 
                 return HttpResponseRedirect(reverse("home:index"))
 

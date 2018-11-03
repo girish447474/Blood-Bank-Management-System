@@ -4,13 +4,10 @@ from django.contrib import admin
 from .models import *
 #from django.contrib.auth.models import User
 
-admin.site.register(DonorAddress)
-admin.site.register(DonorProfile)
-admin.site.register(DonorHistory)
+admin.site.register(UserAddress)
+admin.site.register(UserProfile)
+admin.site.register(UserHistory)
 admin.site.register(Wallet)
 admin.site.register(Transaction)
-admin.site.register(AcceptorAddress)
-admin.site.register(AcceptorProfile)
-admin.site.register(AcceptorHistory)
 admin.site.register(BloodCamp)
 admin.site.register(BloodCampDonor)

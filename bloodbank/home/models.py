@@ -15,6 +15,19 @@ Blood_Groups = (
     ('AB-','AB-'),
 )
 
+Path_labs = (
+    ('Chennai','Chennai'),
+    ('Bangalore', 'Bangalore'),
+    ('Patna','Patna'),
+    ('Mumbai','Mumbai'),
+    ('Hyderabad','Hyderabad'),
+    ('Kolkata','Kolkata'),
+    ('Delhi', 'Delhi'),
+    ('Jamshedpur','Jamshedpur'),
+)
+
+
+
 Gender = (
     ('male','Male'),
     ('female', 'Female'),
@@ -56,8 +69,8 @@ States = (
 
 
 
-class DonorAddress(models.Model):
-    donoraddressid = models.AutoField(primary_key = True)
+class UserAddress(models.Model):
+    useraddressid = models.AutoField(primary_key = True)
     user = models.OneToOneField(User,on_delete = models.CASCADE)
     state = models.CharField(max_length = 30, choices=States)
     city = models.CharField(blank = False, null = False, max_length = 200)
@@ -67,16 +80,16 @@ class DonorAddress(models.Model):
     date = models.DateTimeField(auto_now_add = True)
     blood = models.CharField(max_length=10, choices=Blood_Groups)
 
-class DonorProfile(models.Model):
-    donorprofileid = models.AutoField(primary_key = True)
+class UserProfile(models.Model):
+    userprofileid = models.AutoField(primary_key = True)
     user = models.OneToOneField(User,on_delete = models.CASCADE)
     #donoraddress = models.OneToOneField(DonorAddress,on_delete = models.CASCADE)
     status = models.CharField(null = True, max_length = 200)
     feedback = models.CharField(null = True, max_length = 1000)
 
 
-class DonorHistory(models.Model):
-    donorhistoryid = models.AutoField(primary_key = True)
+class UserHistory(models.Model):
+    userhistoryid = models.AutoField(primary_key = True)
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     #username=models.CharField(max_length =200, null = False, blank = False)
     donation_date = models.DateTimeField(auto_now = True, auto_now_add = False)
@@ -95,52 +108,36 @@ class Transaction(models.Model):
     initialcredit = models.IntegerField(null = True, blank = True)
     aftercredit = models.IntegerField(null = True, blank = True)
     getcredit = models.IntegerField(null = True)
+    pathlab = models.CharField(max_length=20, choices=Path_labs)
     def updatewallet(self):
         self.wallet.credit = self.wallet.credit + self.getcredit
 
 
-
-
-# Acceptor class
-
-
-
-class AcceptorAddress(models.Model):
-    acceptoraddressid = models.AutoField(primary_key = True)
-    user = models.OneToOneField(User,on_delete = models.CASCADE)
-    state = models.CharField(max_length = 30, choices=States)
-    city = models.CharField(blank = False, null = False, max_length = 200)
-    phone = models.CharField(blank = False, null = False, max_length = 100)
-    #birth = models.CharField(blank = False, null = False, max_length = 200)
-    gender = models.CharField(max_length=15, choices=Gender)
-    date = models.DateTimeField(auto_now = True, auto_now_add = False)
-    blood = models.CharField(max_length=10, choices=Blood_Groups)
-
-class AcceptorProfile(models.Model):
-    acceptorprofileid = models.AutoField(primary_key = True)
-    user = models.OneToOneField(User,on_delete = models.CASCADE)
-    status = models.CharField(null = True, max_length = 200)
-    feedback = models.CharField(null = True, max_length = 1000)
-
-
-class AcceptorHistory(models.Model):
-    acceptorhistoryid = models.AutoField(primary_key = True)
-    user = models.ForeignKey(User,on_delete = models.CASCADE)
-    #username=models.CharField(max_length =200, null = False, blank = False)
-    acceptation_date = models.DateTimeField(auto_now = True, auto_now_add = False)
-
-
 #Blood Donation Camp
+
+class BloodAvailability(models.Model):
+    threshhold = models.IntegerField(default = 0)
+    bloodgroup_A_plus = models.IntegerField(default = 0)
+    bloodgroup_A_minus = models.IntegerField(default = 0)
+    bloodgroup_B_plus = models.IntegerField(default = 0)
+    bloodgroup_B_minus = models.IntegerField(default = 0)
+    bloodgroup_O_plus = models.IntegerField(default = 0)
+    bloodgroup_O_minus = models.IntegerField(default = 0)
+    bloodgroup_AB_plus = models.IntegerField(default = 0)
+    bloodgroup_AB_minus = models.IntegerField(default = 0)
+
+
 
 
 class BloodCamp(models.Model):
     place = models.CharField(blank=False, null = False, max_length = 100)
+    duration = models.CharField(blank = False, max_length = 200, null = False)
 
 class BloodCampDonor(models.Model):
     name = models.CharField(blank=False, null = False, max_length=100)
     email = models.EmailField(unique = True)
     phone = models.CharField(max_length = 11, blank = True)
     gender = models.CharField(max_length=15, choices=Gender)
-    date = models.DateTimeField(auto_now = True, auto_now_add = False)
+    date = models.DateTimeField(auto_now_add = True)
     blood = models.CharField(max_length=10, choices=Blood_Groups)
     bloodcamp = models.ForeignKey(BloodCamp,on_delete = models.CASCADE)

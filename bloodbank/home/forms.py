@@ -1,5 +1,5 @@
 from django import forms
-from .models import DonorAddress,DonorProfile
+from .models import UserAddress,UserProfile
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
@@ -30,7 +30,7 @@ class UserForm(forms.ModelForm):
             self.fields[key].required = True
 
 
-class DonorAddressForm(forms.ModelForm):
+class UserAddressForm(forms.ModelForm):
     class Meta:
-        model = DonorAddress
+        model = UserAddress
         exclude = ['user','birth']

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'acceptor.apps.AcceptorConfig',
+    'pathlab.apps.PathlabConfig',
     'home.apps.HomeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
