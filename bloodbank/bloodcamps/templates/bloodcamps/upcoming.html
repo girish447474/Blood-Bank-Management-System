@@ -13,6 +13,7 @@
         <th>StartDate</th>
         <th>EndDate</th>
         <th>location</th>
+        <th>Pre-register</th>
       </tr>
       {% for camp in camps %}
         <tr>
@@ -20,6 +21,7 @@
         <td>{{ camp.startdate }}</td>
         <td>{{ camp.enddate }}</td>
         <td>{{ camp.location }}</td>
+        <td><a href="{% url 'bloodcamps:newdonorpage' %}">Pre-register</a></td>
         </tr>
         {% if donors %}
           {% for donor in donors %}
