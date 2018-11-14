@@ -12,20 +12,37 @@ def camphome(request):
     return render(request,'bloodcamps/camphome.html')
 
 
-def is_past_due(o):
-    return date.today() > o.enddate
-
-def def_fun(request):
-    camps = bloodcamp.objects.filter(status=True)
+def checkdate(o):
+    if(date.today() > o.enddate):
+        print('check 1')
+        return  '1'
+    elif(date.today() < o.startdate):
+        print('check 3')
+        return  '3'
+    else:
+        print('check 2')
+        return  '2'
+def default_fun(request):
+    camps = bloodcamp.objects.all()
     for camp in camps:
-        if is_past_due(camp):
-            camp.status=False
+        if checkdate(camp) == '1' :
+            print('is 1')
+            camp.status='1'
+            camp.save()
+        elif checkdate(camp) == '2' :
+            print('is 2')
+            camp.status='2'
+            camp.save()
+        elif checkdate(camp) == '3' :
+            print('is 3')
+            camp.status='3'
             camp.save()
 
-def history(request):
-    def_fun(request)
 
-    camps=bloodcamp.objects.filter(status=False)
+def history(request):
+    default_fun(request)
+
+    camps=bloodcamp.objects.filter(status='1')
     donors=bloodcampdonor.objects.all()
 
     for camp in camps:
@@ -42,11 +59,31 @@ def history(request):
         'donors': donors,
     }
     return render(request,'bloodcamps/history.html',context=content)
+def ongoing(request):
+    default_fun(request)
+
+    camps=bloodcamp.objects.filter(status=2)
+    donors=bloodcampdonor.objects.all()
+
+    for camp in camps:
+        print(camp.campid)
+        if donors:
+            for donor in donors:
+                if donor.bloodcamp.campid == camp.campid:
+                    print(donor.firstname)
+
+    #print('camps:',camps)
+    #print('donors:',donors)
+    content = {
+        'camps' : camps,
+        'donors': donors,
+    }
+    return render(request,'bloodcamps/ongoing.html',context=content)
 
 def upcoming(request):
-    def_fun(request)
+    default_fun(request)
 
-    camps=bloodcamp.objects.filter(status=True)
+    camps=bloodcamp.objects.filter(status=3)
     donors=bloodcampdonor.objects.all()
 
     for camp in camps:
@@ -74,16 +111,7 @@ def newcamppage(request):
         else:
             print('form invalid')
     return render(request,'bloodcamps/newcamp.html',{'form':form})
-def newupcomingcamp(request):
-    form=newupcomingcamp()
-    if request.method=='POST':
-        form=newupcomingcamp(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return upcoming(request)
-        else:
-            print('form invalid')
-    return render(request,bloodcamps/newcamp)
+
 def newdonorpage(request):
     form1=newdonor()
     if request.method=='POST':
@@ -94,3 +122,4 @@ def newdonorpage(request):
         else:
             print('form invalid')
     return render(request,'bloodcamps/newdonor.html',{'form1':form1})
+
