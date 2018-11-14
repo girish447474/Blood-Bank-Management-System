@@ -5,7 +5,8 @@ urlpatterns=[
     path('',views.camphome,name='camphome'),
     path('history/',views.history,name='history'),
     path('upcoming/',views.upcoming,name='upcoming'),
-    path('newcamp/',views.newcamppage,name='newcamppage'),
+    path('ongoing/',views.ongoing,name='ongoing'),
     path('newdonor/',views.newdonorpage,name='newdonorpage'),
+    path('newcamp/',views.newcamppage,name='newcamppage')
 
 ]
