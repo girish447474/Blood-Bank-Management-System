@@ -23,7 +23,7 @@ class bloodcamp(models.Model):
     startdate=models.DateField()
     enddate=models.DateField()
     location=models.CharField(blank=False,null=False,max_length=150)
-    status=models.BooleanField(default=True)
+    status=models.CharField(default='1',max_length=1)
 class bloodcampdonor(models.Model):
     firstname=models.CharField(blank=False,null=False,max_length=150)
     lastname=models.CharField(blank=False,null=False,max_length=150)

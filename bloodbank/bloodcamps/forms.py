@@ -3,12 +3,8 @@ from bloodcamps.models import bloodcamp,bloodcampdonor
 class newcamp(forms.ModelForm):
     class Meta:
         model=bloodcamp
-        fields='__all__'
+        fields=('campid','startdate','enddate','location')
 class newdonor(forms.ModelForm):
     class Meta:
         model=bloodcampdonor
-        fields='__all__'
-class newupcomingcamp(forms.ModelForm):
-    class Meta:
-        model=bloodcamp
         fields='__all__'

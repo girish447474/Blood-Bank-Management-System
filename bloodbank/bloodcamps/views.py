@@ -122,4 +122,3 @@ def newdonorpage(request):
         else:
             print('form invalid')
     return render(request,'bloodcamps/newdonor.html',{'form1':form1})
-
